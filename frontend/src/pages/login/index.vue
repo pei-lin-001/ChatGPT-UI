@@ -1,230 +1,382 @@
 <template>
-  <div style="display: flex; flex-direction: column">
-    <div style="display: flex; justify-content: space-between">
-      <div style="width: 400px; float: left">
-        <div v-if="cfg.notice" v-html="cfg.notice"></div>
-      </div>
-      <div v-if="cfg.show_github" style="margin: 12px 20px">
-        <a href="https://github.com/dairoot/ChatGPT-Mirror" target="_blank" style="float: right">
-          <svg
-            width="32"
-            height="32"
-            t="1718179802093"
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="4235"
-          >
-            <path
-              d="M1023.560892 524.587752c0 114.331752-32.549236 217.148443-97.647709 308.450075-65.047295 91.301632-149.132822 154.455339-252.205404 189.512299-11.975662 2.303012-20.778286 0.716493-26.305515-4.759558a27.584966 27.584966 0 0 1-8.342021-20.471218V853.150798c0-44.166653-11.566238-76.511177-34.647536-96.982394a446.272549 446.272549 0 0 0 68.32269-12.282731c20.16415-5.476051 41.044792-14.329852 62.590748-26.612583a187.311643 187.311643 0 0 0 53.992837-45.446104c14.432209-18.014672 26.203159-41.914819 35.312851-71.751618 9.109692-29.8368 13.664538-64.074912 13.664538-102.765514 0-55.118754-17.554069-102.049021-52.61103-140.739623 16.376974-41.454216 14.636921-87.872703-5.373695-139.357815-12.436265-4.094244-30.399759-1.535341-53.941659 7.523172a355.17563 355.17563 0 0 0-61.311297 30.041513l-25.333132 16.376974a462.137743 462.137743 0 0 0-127.945112-17.707604 462.137743 462.137743 0 0 0-127.945111 17.758782 589.571074 589.571074 0 0 0-28.301459-18.424096c-11.77095-7.31846-30.34858-16.069906-55.681713-26.305515-25.281954-10.235609-44.422543-13.306292-57.31941-9.212048-19.498835 51.433935-21.085354 97.852421-4.606024 139.306637-35.108139 38.690602-52.713386 85.620869-52.713386 140.739623 0 38.690602 4.606024 72.826357 13.715716 102.458445 9.109692 29.58091 20.778286 53.481057 34.954605 71.700441a180.658498 180.658498 0 0 0 53.634591 45.753172c21.545957 12.282731 42.477777 21.18771 62.641926 26.612583 20.215328 5.527229 42.989557 9.621472 68.32269 12.333909-17.758781 16.376974-28.659705 39.867697-32.651593 70.369811a129.941055 129.941055 0 0 1-29.990334 10.235609 184.087426 184.087426 0 0 1-37.974109 3.428929c-14.688099 0-29.171485-4.913092-43.654872-14.688099-14.432209-9.826185-26.766117-24.053681-37.001726-42.682489a109.162769 109.162769 0 0 0-32.293346-35.517563c-13.101579-9.109692-24.104859-14.585743-33.009839-16.376974l-13.306292-2.047122c-9.314404 0-15.762838 1.023561-19.345301 3.070683-3.582463 2.047122-4.606024 4.606024-3.326572 7.83024a37.769397 37.769397 0 0 0 5.987831 9.570295 49.182101 49.182101 0 0 0 8.700267 8.188487l4.606024 3.377751c9.826185 4.606024 19.447657 13.255114 29.017952 25.998447 9.570294 12.743333 16.581686 24.360749 20.982998 34.80107l6.653146 15.71166c5.783119 17.298179 15.558126 31.320963 29.376197 42.017174 13.766894 10.747389 28.659705 17.554069 44.627255 20.471218 15.96755 2.968327 31.423319 4.606024 46.316131 4.810736 14.841633 0.204712 27.22672-0.562958 37.001726-2.405368l15.302235-2.712436c0 17.298179 0.102356 37.564685 0.358247 60.799517l0.307068 36.848192c0 8.188487-2.86597 15.046345-8.700268 20.471218-5.731941 5.527229-14.636921 7.113748-26.612583 4.810736-103.072582-35.056961-187.158109-98.261846-252.205404-189.512299C32.549236 741.736195 0 638.919504 0 524.587752c0-95.191163 22.876586-182.910331 68.629758-263.31104a516.028224 516.028224 0 0 1 186.288082-190.894106A491.309228 491.309228 0 0 1 511.780446 0.012795a491.309228 491.309228 0 0 1 256.913784 70.369811 516.028224 516.028224 0 0 1 186.236905 190.894106C1000.684306 341.626242 1023.560892 429.447767 1023.560892 524.587752z"
-              fill="#555555"
-              p-id="4236"
-            ></path>
-          </svg>
-        </a>
-      </div>
+  <div class="login-wrapper">
+    <!-- 顶部 ChatGPT 标题 -->
+    <div class="login-header">
+      <h1 class="login-brand">ChatGPT</h1>
     </div>
-    <div class="login-container">
-      <t-card class="login-card">
-        <h2 class="login-title">
-          <component :is="LogoOpenai" style="margin-bottom: 50px"></component>
 
-          <div v-if="IsRegister">创建帐户</div>
-          <div v-else>欢迎回来</div>
-        </h2>
+    <!-- 登录表单容器 -->
+    <div class="login-container">
+      <div class="login-card">
+        <h2 class="login-title">登录到您的账户</h2>
+        
         <t-loading :loading="loading">
           <t-form :data="loginForm" :label-width="0" :rules="rules" ref="loginFormRef" @submit="onSubmit">
+            <!-- 邮箱/用户名输入框 -->
             <t-form-item name="username">
-              <t-input v-model="loginForm.username" placeholder="用户名"></t-input>
+              <t-input 
+                v-model="loginForm.username" 
+                placeholder="用户名或邮箱地址"
+                size="large"
+                class="login-input"
+              />
             </t-form-item>
+
+            <!-- 密码输入框 -->
             <t-form-item name="password">
-              <t-input v-model="loginForm.password" type="password" autocomplete="on" placeholder="密码"></t-input>
+              <t-input 
+                v-model="loginForm.password" 
+                type="password" 
+                autocomplete="on" 
+                placeholder="密码"
+                size="large"
+                class="login-input"
+              />
             </t-form-item>
 
-            <t-form-item v-if="loginType === 'register'" name="chatgpt_token">
-              <div style="display: flex; flex-direction: column; width: 100%">
-                <t-textarea
-                  v-model="loginForm.chatgpt_token"
-                  placeholder="ChatGPT Cookies Token"
-                  size="large"
-                ></t-textarea>
-                <span style="font-size: 12px; color: #888">
-                  Session Token 获取说明：
-                  <t-link target="_blank" theme="primary" size="small" :href="ChatgptTokenTutorialUrl">手动获取</t-link>
-                  <!-- or
-                  <t-link target="_blank" theme="primary" size="small" :href="ChatgptTokenAuthUrl">自动获取</t-link> -->
-                </span>
-              </div>
-            </t-form-item>
-
+            <!-- 登录按钮 -->
             <t-form-item>
-              <t-button theme="success" type="submit" size="large" class="login-button">
-                <span v-if="IsRegister">注册</span>
-                <span v-else> 登录</span>
+              <t-button 
+                theme="primary" 
+                type="submit" 
+                size="large" 
+                class="login-button"
+                block
+              >
+                继续
               </t-button>
             </t-form-item>
           </t-form>
         </t-loading>
-        <div style="text-align: center; margin-top: 15px">
-          <div v-if="IsRegister">
-            已经拥有帐户？<t-link :underline="false" href="/admin/#/login" style="color: #10a37f">登录</t-link> or
-            <t-link :underline="false" style="color: red" @click="goFree">免费体验</t-link>
-          </div>
-          <div v-else>
-            没有帐户？
-            <t-link :underline="false" style="color: red" @click="goFree">免费体验</t-link>
-          </div>
+
+        <!-- 分隔线 -->
+        <div class="divider">
+          <span>或</span>
         </div>
-      </t-card>
+
+        <!-- 第三方登录按钮 -->
+        <div class="social-login">
+          <t-button 
+            variant="outline" 
+            size="large" 
+            class="social-button google-button"
+            block
+            @click="handleSocialLogin('google')"
+          >
+            <template #icon>
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+            </template>
+            继续使用 Google 登录
+          </t-button>
+
+          <t-button 
+            variant="outline" 
+            size="large" 
+            class="social-button microsoft-button"
+            block
+            @click="handleSocialLogin('microsoft')"
+          >
+            <template #icon>
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#f25022" d="M1 1h10v10H1z"/>
+                <path fill="#00a4ef" d="M13 1h10v10H13z"/>
+                <path fill="#7fba00" d="M1 13h10v10H1z"/>
+                <path fill="#ffb900" d="M13 13h10v10H13z"/>
+              </svg>
+            </template>
+            继续使用 Microsoft 账户登录
+          </t-button>
+
+          <t-button 
+            variant="outline" 
+            size="large" 
+            class="social-button apple-button"
+            block
+            @click="handleSocialLogin('apple')"
+          >
+            <template #icon>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </template>
+            继续使用 Apple 登录
+          </t-button>
+        </div>
+
+        <!-- 底部链接 -->
+        <div class="login-footer">
+          <t-link href="#" class="footer-link">使用条款</t-link>
+          <span class="separator">|</span>
+          <t-link href="#" class="footer-link">隐私政策</t-link>
+        </div>
+
+        <!-- 管理员快速登录提示 -->
+        <div class="admin-hint">
+          <t-alert theme="info" message="管理员账户：admin / 123456" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { FormInstanceFunctions, FormProps, FormRule } from 'tdesign-vue-next';
+import { FormInstanceFunctions, FormProps, FormRule, MessagePlugin } from 'tdesign-vue-next';
 import { computed, onMounted, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import LogoOpenai from '@/assets/openai-logo.svg';
-import { ChatgptTokenTutorialUrl } from '@/constants/index';
 import { useUserStore } from '@/store';
 
 const userStore = useUserStore();
 const loading = ref(false);
 const route = useRoute();
 const router = useRouter();
-const cfg = ref({ show_github: false, notice: '' });
+
+// 默认设置管理员账户
 const loginForm = reactive({
-  username: '',
-  password: '',
-  chatgpt_token: undefined,
-  invite_token: undefined,
-  invite_id: undefined,
+  username: 'admin',
+  password: '123456',
 });
 
 onMounted(async () => {
-  await getVersionCfg();
+  // 页面加载时可以执行一些初始化操作
 });
 
 const rules: Record<string, FormRule[]> = {
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [{ required: true, message: '请输入用户名或邮箱', trigger: 'blur' }],
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-  chatgpt_token: [
-    { required: true, message: '请输入 Access Token 或 Session Token 或 Refresh Token', trigger: 'blur' },
-  ],
 };
 
 const loginFormRef = ref<FormInstanceFunctions>(null);
 
-const IsRegister = computed(() => {
-  // console.log('route.path', route.path, route.path.endsWith('/register'));
-  return !route.path.endsWith('/login');
-});
-
-const loginType = computed(() => {
-  if (route.path.endsWith('/register')) {
-    return 'register';
-  }
-  if (route.path.endsWith('/invite_register')) {
-    return 'invite_register';
-  }
-  return 'login';
-});
-
 const onSubmit: FormProps['onSubmit'] = async ({ validateResult, firstError }) => {
   if (validateResult === true) {
     loading.value = true;
-    let url;
-
-    switch (loginType.value) {
-      case 'register':
-        url = '/0x/user/register';
-        break;
-      // case 'invite_register':
-      //   url = '/api/invite-register';
-      //   break;
-      default:
-        url = '/0x/user/login';
+    
+    try {
+      // 模拟登录请求
+      const data = await userStore.login('/0x/user/login', loginForm);
+      
+      if (data && data.admin_token) {
+        if (data.is_admin) {
+          MessagePlugin.success('登录成功！');
+          router.push({ name: 'User' });
+        } else {
+          router.push({ name: 'LoginChatgpt' });
+        }
+      }
+    } catch (error) {
+      MessagePlugin.error('登录失败，请检查用户名和密码');
+    } finally {
+      loading.value = false;
     }
-    if (loginType.value === 'invite_register') {
-      const { hash } = window.location;
-      const paramsString = hash.split('?')[1];
-      const params = new URLSearchParams(paramsString);
-      loginForm.invite_token = params.get('invite_token');
-      loginForm.invite_id = params.get('id');
-    }
-
-    // console.log(loginForm)
-    const data = await userStore.login(url, loginForm);
-    if (data.admin_token && data.is_admin) {
-      router.push({ name: 'User' });
-    } else if (data.admin_token) {
-      return router.push({ name: 'LoginChatgpt' });
-    }
-
-    loading.value = false;
   } else {
-    console.error('表单引用未定义', firstError);
+    console.error('表单验证失败', firstError);
   }
 };
 
-const getVersionCfg = async () => {
-  const response = await fetch('/0x/user/version-cfg');
-  const data = await response.json();
-  Object.assign(cfg.value, { ...data });
-};
-
-const goFree = async () => {
-  loading.value = true;
-  const data = await userStore.login('/0x/user/login-free', {});
-  if (data.admin_token) {
-    return router.push({ name: 'LoginChatgpt' });
-  }
-
-  loading.value = false;
+const handleSocialLogin = (provider: string) => {
+  MessagePlugin.info(`${provider} 登录功能暂未开放`);
 };
 </script>
 
 <style scoped>
+.login-wrapper {
+  min-height: 100vh;
+  background: #f7f7f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-header {
+  padding: 40px 0 20px;
+  text-align: center;
+}
+
+.login-brand {
+  font-size: 32px;
+  font-weight: 600;
+  color: #2d333a;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
 .login-container {
+  flex: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 80vh;
+  align-items: flex-start;
+  padding: 20px;
 }
 
 .login-card {
-  width: 400px;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  width: 64px;
-  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
 }
 
 .login-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2d333a;
   text-align: center;
-  font-size: 36px;
-  margin-bottom: 30px;
+  margin: 0 0 32px 0;
+  line-height: 1.3;
+}
+
+.login-input {
+  margin-bottom: 16px;
+}
+
+:deep(.login-input .t-input) {
+  height: 52px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+:deep(.login-input .t-input:focus) {
+  border-color: #10a37f;
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
 }
 
 .login-button {
-  width: 100%;
-  height: 50px;
-  background-color: #10a37f;
-  border-color: #10a37f;
+  height: 52px;
+  background: #10a37f;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+  transition: all 0.2s ease;
 }
 
 .login-button:hover {
-  background-color: #0e8a6d;
-  border-color: #0e8a6d;
+  background: #0d8f6b;
+  transform: translateY(-1px);
 }
 
-:deep(.t-input) {
-  height: 50px;
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 32px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #e5e7eb;
+  z-index: 1;
+}
+
+.divider span {
+  background: white;
+  padding: 0 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.social-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.social-button {
+  height: 52px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid #d1d5db;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-button:hover {
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-button:hover {
+  border-color: #4285f4;
+}
+
+.microsoft-button:hover {
+  border-color: #00a4ef;
+}
+
+.apple-button:hover {
+  border-color: #000;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footer-link {
+  color: #6b7280;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #10a37f;
+}
+
+.separator {
+  margin: 0 12px;
+  color: #d1d5db;
+}
+
+.admin-hint {
+  margin-top: 24px;
+}
+
+:deep(.admin-hint .t-alert) {
+  border-radius: 8px;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+:deep(.admin-hint .t-alert__message) {
+  color: #0369a1;
+  font-size: 14px;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 24px;
+    margin: 0 16px;
+  }
+  
+  .login-title {
+    font-size: 20px;
+  }
+  
+  .login-brand {
+    font-size: 28px;
+  }
 }
 </style>
