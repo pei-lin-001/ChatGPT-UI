@@ -9,3 +9,4 @@ backend/.idea/
 backend/logs/*
 
 /.env
+.env
