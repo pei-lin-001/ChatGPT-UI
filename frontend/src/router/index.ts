@@ -1,97 +1,60 @@
-import uniq from 'lodash/uniq';
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 
-const env = import.meta.env.MODE || 'development';
+import Login from '@/pages/login/index.vue';
 
-// 导入homepage相关固定路由
-const homepageModules = import.meta.glob('./modules/**/homepage.ts', { eager: true });
+import Layout from '@/layouts/index.vue';
 
-// 导入modules非homepage相关固定路由
-const fixedModules = import.meta.glob('./modules/**/!(homepage).ts', { eager: true });
+import pgRouter from './modules/homepage';
+import componentsRouter from './modules/components';
+import detailRouter from './modules/detail';
+import resultRouter from './modules/result';
+import formRouter from './modules/form';
+import listRouter from './modules/list';
+import userRouter from './modules/user';
 
-// 其他固定路由
+export const homepageRouterList: Array<RouteRecordRaw> = [
+  {
+    path: '/homepage',
+    component: Layout,
+    redirect: '/homepage/base',
+    name: 'homepage',
+    meta: { title: '仪表盘', icon: 'dashboard' },
+    children: pgRouter,
+  },
+];
+
+export const toolRouterList: Array<RouteRecordRaw> = [
+  {
+    path: '/user',
+    name: 'user',
+    component: Layout,
+    redirect: '/user/index',
+    meta: { title: '个人页', icon: 'user-circle' },
+    children: userRouter,
+  },
+];
+
+// 存放动态路由
+export const asyncRouterList: Array<RouteRecordRaw> = [...homepageRouterList, ...toolRouterList];
+
+// 存放固定的路由
 const defaultRouterList: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/pages/login/index.vue'),
-  },
-  {
-    path: '/login-chatgpt',
-    name: 'LoginChatgpt',
-    component: () => import('@/pages/login/chatgpt.vue'),
-  },
-  {
-    path: '/register',
-    name: 'register',
-    component: () => import('@/pages/login/index.vue'),
-  },
-  {
-    path: '/invite_register',
-    name: 'invite_register',
-    component: () => import('@/pages/login/index.vue'),
+    component: Login,
   },
   {
     path: '/',
-    redirect: '/login',
-    // redirect: '/login-chatgpt',
-    // redirect: '/account/user',
+    redirect: '/homepage/base',
   },
+  ...resultRouter,
 ];
-// 存放固定路由
-export const homepageRouterList: Array<RouteRecordRaw> = mapModuleRouterList(homepageModules);
-export const fixedRouterList: Array<RouteRecordRaw> = mapModuleRouterList(fixedModules);
 
-export const allRoutes = [...homepageRouterList, ...fixedRouterList, ...defaultRouterList];
-
-// 固定路由模块转换为路由
-export function mapModuleRouterList(modules: Record<string, unknown>): Array<RouteRecordRaw> {
-  const routerList: Array<RouteRecordRaw> = [];
-  Object.keys(modules).forEach((key) => {
-    // @ts-ignore
-    const mod = modules[key].default || {};
-    const modList = Array.isArray(mod) ? [...mod] : [mod];
-    routerList.push(...modList);
-  });
-  return routerList;
-}
-
-export const getRoutesExpanded = () => {
-  const expandedRoutes: Array<string> = [];
-
-  fixedRouterList.forEach((item) => {
-    if (item.meta && item.meta.expanded) {
-      expandedRoutes.push(item.path);
-    }
-    if (item.children && item.children.length > 0) {
-      item.children
-        .filter((child) => child.meta && child.meta.expanded)
-        .forEach((child: RouteRecordRaw) => {
-          expandedRoutes.push(item.path);
-          expandedRoutes.push(`${item.path}/${child.path}`);
-        });
-    }
-  });
-  return uniq(expandedRoutes);
-};
-
-export const getActive = (maxLevel = 3): string => {
-  // 非组件内调用必须通过Router实例获取当前路由
-  const route = router.currentRoute.value;
-
-  if (!route.path) {
-    return '';
-  }
-
-  return route.path
-    .split('/')
-    .filter((_item: string, index: number) => index <= maxLevel && index > 0)
-    .map((item: string) => `/${item}`)
-    .join('');
-};
+export const allRoutes = [...defaultRouterList, ...asyncRouterList];
 
 const router = createRouter({
-  history: createWebHashHistory(env === 'site' ? '/starter/vue-next/' : import.meta.env.VITE_BASE_URL),
+  history: createWebHashHistory(),
   routes: allRoutes,
   scrollBehavior() {
     return {
