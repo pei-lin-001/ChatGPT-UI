@@ -1,45 +1,63 @@
-// eslint-disable-next-line simple-import-sort/imports
+// API 请求工具
 import { MessagePlugin } from 'tdesign-vue-next';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '@/store';
 
-const RequestApi = async (url: string, method = 'GET', body: any = undefined) => {
-  const userStore = useUserStore();
-  const { token } = userStore;
+const API_BASE_URL = import.meta.env.VITE_API_URL_PREFIX || '/0x';
 
-  const router = useRouter();
-  const defaultHeaders = {
-    'Content-Type': 'application/json',
-    Authorization: `token ${token}`,
-  };
+interface RequestOptions {
+  method?: string;
+  headers?: Record<string, string>;
+  body?: any;
+}
 
-  const response = await fetch(url, {
-    method,
-    headers: defaultHeaders,
-    body: body ? JSON.stringify(body) : undefined,
-  });
+class RequestApi {
+  private baseURL: string;
 
-  if (response.status === 401) {
-    router.push({ name: 'login' });
-    return new Response();
+  constructor(baseURL: string = API_BASE_URL) {
+    this.baseURL = baseURL;
   }
 
-  if (response.status === 403) {
-    router.push({ name: 'login' });
-    return new Response();
+  async request(url: string, method: string = 'GET', data?: any): Promise<Response> {
+    const options: RequestInit = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
+      },
+    };
+
+    if (data && method !== 'GET') {
+      options.body = JSON.stringify(data);
+    }
+
+    const fullUrl = url.startsWith('http') ? url : `${this.baseURL}${url}`;
+
+    try {
+      const response = await fetch(fullUrl, options);
+      return response;
+    } catch (error) {
+      console.error('Request failed:', error);
+      throw error;
+    }
   }
 
-  if (response.status === 500) {
-    MessagePlugin.error('系统异常');
-    return new Response();
+  private getAuthHeaders(): Record<string, string> {
+    const token = localStorage.getItem('user_token') || sessionStorage.getItem('user_token');
+    if (token) {
+      return {
+        'Authorization': `Token ${token}`,
+      };
+    }
+    return {};
   }
+}
 
-  if (response.status === 502) {
-    MessagePlugin.error('服务未正常启动');
-    return new Response();
-  }
+// 创建默认实例
+const requestApi = new RequestApi();
 
-  return response;
-};
+// 导出默认函数
+export default function RequestApiFunction(url: string, method: string = 'GET', data?: any): Promise<Response> {
+  return requestApi.request(url, method, data);
+}
 
-export default RequestApi;
+// 也导出类实例，以便其他地方使用
+export { RequestApi, requestApi };

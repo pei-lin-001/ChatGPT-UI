@@ -126,24 +126,19 @@
 
 <script setup lang="ts">
 import { FormInstanceFunctions, FormProps, FormRule, MessagePlugin } from 'tdesign-vue-next';
-import { computed, onMounted, reactive, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import { useUserStore } from '@/store';
 
 const userStore = useUserStore();
 const loading = ref(false);
-const route = useRoute();
 const router = useRouter();
 
 // 默认设置管理员账户
 const loginForm = reactive({
   username: 'admin',
   password: '123456',
-});
-
-onMounted(async () => {
-  // 页面加载时可以执行一些初始化操作
 });
 
 const rules: Record<string, FormRule[]> = {
@@ -158,18 +153,24 @@ const onSubmit: FormProps['onSubmit'] = async ({ validateResult, firstError }) =
     loading.value = true;
     
     try {
-      // 模拟登录请求
+      // 使用模拟登录
       const data = await userStore.login('/0x/user/login', loginForm);
       
       if (data && data.admin_token) {
         if (data.is_admin) {
-          MessagePlugin.success('登录成功！');
-          router.push({ name: 'User' });
+          // 管理员跳转到用户管理页面
+          setTimeout(() => {
+            router.push({ name: 'User' });
+          }, 1000);
         } else {
-          router.push({ name: 'LoginChatgpt' });
+          // 普通用户跳转到 ChatGPT 选择页面
+          setTimeout(() => {
+            router.push({ name: 'LoginChatgpt' });
+          }, 1000);
         }
       }
     } catch (error) {
+      console.error('Login error:', error);
       MessagePlugin.error('登录失败，请检查用户名和密码');
     } finally {
       loading.value = false;
@@ -380,3 +381,4 @@ const handleSocialLogin = (provider: string) => {
   }
 }
 </style>
+</template>

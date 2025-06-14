@@ -10,9 +10,27 @@ const InitUserInfo: UserInfo = {
   roles: [], // 前端权限模型使用 如果使用请配置modules/permission-fe.ts使用
 };
 
+// 模拟用户数据
+const MOCK_USERS = [
+  {
+    username: 'admin',
+    password: '123456',
+    admin_token: 'mock_admin_token_123456',
+    is_admin: true,
+    name: '管理员'
+  },
+  {
+    username: 'user',
+    password: '123456',
+    admin_token: 'mock_user_token_123456',
+    is_admin: false,
+    name: '普通用户'
+  }
+];
+
 export const useUserStore = defineStore('user', {
   state: () => ({
-    token: 'main_token', // 默认token不走权限
+    token: '', // 默认token不走权限
     is_admin: false,
     userInfo: { ...InitUserInfo },
   }),
@@ -23,35 +41,54 @@ export const useUserStore = defineStore('user', {
   },
   actions: {
     async login(url: string, userInfo: Record<string, unknown>) {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(userInfo),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      let data = null;
-      if (response.status === 200) {
-        data = await response.json();
+      try {
+        // 模拟登录验证
+        const { username, password } = userInfo;
+        
+        // 查找匹配的用户
+        const user = MOCK_USERS.find(u => 
+          u.username === username && u.password === password
+        );
+
+        if (!user) {
+          MessagePlugin.error('用户名或密码错误');
+          return null;
+        }
+
+        // 模拟成功响应
+        const data = {
+          admin_token: user.admin_token,
+          is_admin: user.is_admin,
+          message: '登录成功'
+        };
+
         this.token = data.admin_token;
         this.is_admin = data.is_admin;
+        this.userInfo.name = user.name;
+        
+        // 保存到本地存储
         Cookies.set('user_token', data.admin_token, { expires: 7 });
+        localStorage.setItem('user_token', data.admin_token);
+        
         MessagePlugin.success('登录成功');
-      } else if (response.status === 400) {
-        data = await response.json();
-        MessagePlugin.error(JSON.stringify(Object.values(data)[0]));
-      } else if (response.status === 502) {
-        MessagePlugin.error('服务未正常启动');
-        return new Response();
-      } else if (response.status === 500) {
-        MessagePlugin.error('系统异常，请稍后再试');
+        return data;
+
+      } catch (error) {
+        console.error('Login error:', error);
+        MessagePlugin.error('登录失败，请稍后重试');
+        return null;
       }
-      return data;
     },
 
     async logout() {
       this.token = '';
+      this.is_admin = false;
       this.userInfo = { ...InitUserInfo };
+      
+      // 清除本地存储
+      Cookies.remove('user_token');
+      localStorage.removeItem('user_token');
+      sessionStorage.removeItem('user_token');
     },
   },
   persist: {
@@ -60,6 +97,6 @@ export const useUserStore = defineStore('user', {
       permissionStore.initRoutes();
     },
     key: 'user',
-    paths: ['token'],
+    paths: ['token', 'is_admin', 'userInfo'],
   },
 });

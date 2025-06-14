@@ -46,14 +46,13 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     server: {
       port: 3002,
       host: '0.0.0.0',
-      proxy: {
-        [VITE_API_URL_PREFIX]: {
-          target: 'http://127.0.0.1:8000/',
-          // target: 'https://chatgpt.dairoot.cn/',
-
-          changeOrigin: true,
-        },
-      },
+      // 移除后端代理，使用模拟数据
+      // proxy: {
+      //   [VITE_API_URL_PREFIX]: {
+      //     target: 'http://127.0.0.1:8000/',
+      //     changeOrigin: true,
+      //   },
+      // },
     },
   };
 };
