@@ -73,7 +73,6 @@
           </div>
           <div v-else>
             没有帐户？
-            <t-link :underline="false" href="/admin/#/register" style="color: #10a37f">注册</t-link> or
             <t-link :underline="false" style="color: red" @click="goFree">免费体验</t-link>
           </div>
         </div>
